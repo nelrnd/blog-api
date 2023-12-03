@@ -1,5 +1,5 @@
 const express = require("express")
-const Router = express.Router()
+const Router = express.Router({ mergeParams: true })
 const Comment = require("../models/comment")
 
 Router.get("/", async (req, res, next) => {
