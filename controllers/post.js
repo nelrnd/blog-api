@@ -3,7 +3,13 @@ const { body, validationResult } = require("express-validator")
 
 exports.post_list = async (req, res, next) => {
   try {
-    const allPosts = await Post.find({ published: true }).sort("timestamp").exec()
+    console.log(req.isAuth)
+    let allPosts
+    if (req.isAuth) {
+      allPosts = await Post.find().sort("timestamp").exec()
+    } else {
+      allPosts = await Post.find({ published: true }).sort("timestamp").exec()
+    }
     res.json(allPosts)
   } catch (err) {
     console.error(err)
@@ -66,6 +72,9 @@ exports.post_detail = async (req, res, next) => {
     const post = await Post.findById(postId).exec()
     if (!post) {
       return res.status(404).json({ error: "Post not found" })
+    }
+    if (req.isAuth === false && post.published === false) {
+      return res.status(401).json({ error: "Not authorized" })
     }
     res.json(post)
   } catch (err) {

@@ -28,3 +28,19 @@ exports.auth_login = (req, res, next) => {
 }
 
 exports.auth_protected = passport.authenticate("jwt", { session: false })
+
+exports.auth_check_auth = (req, res, next) => {
+  try {
+    const bearerHeader = req.headers["authorization"]
+    if (typeof bearerHeader === "undefined") throw new Error()
+    const bearer = bearerHeader.split(" ")
+    const token = bearer[1]
+    const decoded = jwt.verify(token, process.env.SECRET_KEY)
+    if (decoded.password !== process.env.ADMIN_PASSWORD) throw new Error()
+    req.isAuth = true
+    next()
+  } catch (err) {
+    req.isAuth = false
+    next()
+  }
+}
