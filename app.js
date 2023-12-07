@@ -14,11 +14,13 @@ const main = async () => mongoose.connect(mongoDB)
 main().catch((err) => console.error(err))
 
 const router = express.Router()
+const indexRouter = require("./routes/index")
 const genreRouter = require("./routes/genre")
 const postRouter = require("./routes/post")
 const commentRouter = require("./routes/comment")
 
 app.use("/api", router)
+router.use("/", indexRouter)
 router.use("/genres", genreRouter)
 router.use("/posts", postRouter)
 router.use("/posts/:postId/comments", commentRouter)
