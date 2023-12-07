@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator")
 exports.comment_list = async (req, res, next) => {
   try {
     const { postId } = req.params
-    const postComments = await Comment.find({ post: postId }).sort("timestamp").exec()
+    const postComments = await Comment.find({ post: postId }).sort("-timestamp").exec()
     res.json(postComments)
   } catch (err) {
     console.error(err)
@@ -23,7 +23,7 @@ exports.comment_create = [
   },
   body("from")
     .trim()
-    .isLength({ min: 3, max: 3 })
+    .isLength({ min: 3, max: 30 })
     .withMessage("Name must be between 3 and 30 characters long.")
     .escape(),
   body("body.*").escape(),
