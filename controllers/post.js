@@ -3,7 +3,6 @@ const { body, validationResult } = require("express-validator")
 
 exports.post_list = async (req, res, next) => {
   try {
-    console.log(req.isAuth)
     let allPosts
     if (req.isAuth) {
       allPosts = await Post.find().sort("timestamp").exec()
